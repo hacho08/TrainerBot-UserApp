@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'main_choice.dart';
 
 class CheckPage extends StatelessWidget {
   const CheckPage({super.key});
@@ -20,24 +20,6 @@ class CheckPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF), // 메인 로그인 페이지 배경색
-      appBar: AppBar(
-        backgroundColor: Colors.white, // AppBar 배경색
-        elevation: 0, // 그림자 제거
-        actions: [
-          IconButton(
-            icon: Image.asset('images/next.png'), // 버튼 이미지 경로 설정
-            iconSize: 40, // 이미지 크기 설정
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TrainerHomePage(), // 이동할 페이지로 설정
-                ),
-              );
-            },
-          ),
-        ],
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

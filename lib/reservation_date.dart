@@ -39,8 +39,15 @@ class _ReservationPageState extends State<ReservationPage> {
 
   void selectDate(int index) {
     setState(() {
-      selectedIndex = index; // 클릭된 날짜를 활성화
-      selectedDate = dates[index]['date']; // 선택된 날짜 저장
+      if (selectedIndex == index) {
+        // 이미 선택된 날짜를 다시 누르면 선택 해제
+        selectedIndex = null;
+        selectedDate = null;
+      } else {
+        // 새로운 날짜를 선택
+        selectedIndex = index;
+        selectedDate = dates[index]['date'];
+      }
     });
   }
 
@@ -71,7 +78,7 @@ class _ReservationPageState extends State<ReservationPage> {
                         icon: Icon(
                           Icons.arrow_back,
                           color: Colors.teal[800],
-                          size: screenWidth * 0.07, // 뒤로가기 아이콘 크기
+                          size: screenWidth * 0.08, // 뒤로가기 아이콘 크기
                         ),
                         onPressed: () {
                           Navigator.pop(context); //  뒤로가기 동작
@@ -80,7 +87,7 @@ class _ReservationPageState extends State<ReservationPage> {
                       Text(
                         '뒤로 가기',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.035, // 텍스트 크기 조정
+                          fontSize: screenWidth * 0.05, // 텍스트 크기 조정
                           fontWeight: FontWeight.bold,
                           color: Colors.teal[800],
                         ),
@@ -109,13 +116,13 @@ class _ReservationPageState extends State<ReservationPage> {
                 color: Color(0xFF265A5A),
               ),
             ),
-            SizedBox(height: screenHeight * 0.04),
+            SizedBox(height: screenHeight * 0.03),
             Text(
               '날짜',
               style: TextStyle(
-                fontSize: screenWidth * 0.07,
+                fontSize: screenWidth * 0.08,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal[800],
+                color: Color(0xFF265A5A),
               ),
             ),
             SizedBox(height: screenHeight * 0.02),
@@ -183,21 +190,24 @@ class _ReservationPageState extends State<ReservationPage> {
                   } else {
                     // 날짜가 선택되지 않았을 경우 경고 메시지
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('날짜를 선택해주세요!')),
+                      SnackBar(content: Text('날짜를 선택해주세요!',
+                      style: TextStyle(
+                        fontSize: 30
+                      ),)),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
+                  backgroundColor: Color(0xFF265A5A),
                   padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.2,
+                    horizontal: screenWidth * 0.35,
                     vertical: screenHeight * 0.02,
                   ),
                 ),
                 child: Text(
                   '다음',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.05,
+                    fontSize: screenWidth * 0.06,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -220,7 +230,7 @@ class _ReservationPageState extends State<ReservationPage> {
         width: screenWidth * 0.6,
         height: screenHeight * 0.18,
         decoration: BoxDecoration(
-          color: isSelected ? Colors.teal[800] : Colors.white,
+          color: isSelected ? Color(0xFF265A5A): Colors.white,
           border: Border.all(color: Colors.teal[800]!, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -229,7 +239,7 @@ class _ReservationPageState extends State<ReservationPage> {
             '${dateInfo['date']}\n${dateInfo['day']}',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: screenWidth * 0.065,
+              fontSize: screenWidth * 0.075,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               color: isSelected ? Colors.white : Colors.teal[800],
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'main_choice.dart';
 import 'reservation_ok.dart';
 
 class CheckPageDelete extends StatelessWidget {

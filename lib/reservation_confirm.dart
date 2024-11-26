@@ -42,7 +42,7 @@ class ReservationConfirmationPage extends StatelessWidget {
                         icon: Icon(
                           Icons.arrow_back,
                           color: Colors.teal[800],
-                          size: screenWidth * 0.07, // 뒤로가기 아이콘 크기
+                          size: screenWidth * 0.08, // 뒤로가기 아이콘 크기
                         ),
                         onPressed: () {
                           Navigator.pop(context); // 뒤로가기 동작
@@ -51,7 +51,7 @@ class ReservationConfirmationPage extends StatelessWidget {
                       Text(
                         '뒤로 가기',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.035, // 텍스트 크기 조정
+                          fontSize: screenWidth * 0.05, // 텍스트 크기 조정
                           fontWeight: FontWeight.bold,
                           color: Colors.teal[800],
                         ),
@@ -81,9 +81,9 @@ class ReservationConfirmationPage extends StatelessWidget {
             ),
             SizedBox(height: screenHeight * 0.06),
             _buildInfoRow('예약 날짜', selectedDate, screenWidth, screenHeight),
-            SizedBox(height: screenHeight * 0.02),
+            SizedBox(height: screenHeight * 0.025),
             _buildInfoRow('예약 시간', formattedTime, screenWidth, screenHeight), // 수정된 부분
-            SizedBox(height: screenHeight * 0.02),
+            SizedBox(height: screenHeight * 0.025),
             _buildInfoRow('운동 시간', '1시간', screenWidth, screenHeight),
             SizedBox(height: screenHeight * 0.25),
             Center(
@@ -98,9 +98,9 @@ class ReservationConfirmationPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal[800],
+                  backgroundColor: Color(0xFF265A5A),
                   padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.2,
+                    horizontal: screenWidth * 0.35,
                     vertical: screenHeight * 0.02,
                   ),
                 ),
@@ -129,15 +129,15 @@ class ReservationConfirmationPage extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: screenWidth * 0.06,
+            fontSize: screenWidth * 0.07,
             fontWeight: FontWeight.bold,
-            color: Colors.teal[800],
+            color: Color(0xFF265A5A),
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            fontSize: screenWidth * 0.06,
+            fontSize: screenWidth * 0.065,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),

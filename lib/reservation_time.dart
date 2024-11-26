@@ -20,8 +20,15 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
 
   void selectTime(String time, String period) {
     setState(() {
-      selectedTime = time; // 선택된 시간 저장
-      selectedPeriod = period; // 선택된 오전/오후 저장
+      if (selectedTime == time) {
+        // 이미 선택된 시간을 다시 누르면 선택 해제
+        selectedTime = null;
+        selectedPeriod = null;
+      } else {
+        // 새로운 시간을 선택
+        selectedTime = time;
+        selectedPeriod = period;
+      }
     });
   }
 
@@ -52,7 +59,7 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
                         icon: Icon(
                           Icons.arrow_back,
                           color: Colors.teal[800],
-                          size: screenWidth * 0.07, // 뒤로가기 아이콘 크기
+                          size: screenWidth * 0.08, // 뒤로가기 아이콘 크기
                         ),
                         onPressed: () {
                           Navigator.pop(context); // 뒤로가기 동작
@@ -61,7 +68,7 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
                       Text(
                         '뒤로 가기',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.035, // 텍스트 크기 조정
+                          fontSize: screenWidth * 0.05, // 텍스트 크기 조정
                           fontWeight: FontWeight.bold,
                           color: Colors.teal[800],
                         ),
@@ -104,7 +111,7 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
                     Text(
                       '오전',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.05,
+                        fontSize: screenWidth * 0.06,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -125,7 +132,7 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
                     Text(
                       '오후',
                       style: TextStyle(
-                        fontSize: screenWidth * 0.05,
+                        fontSize: screenWidth * 0.06,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -162,21 +169,24 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
                   } else {
                     // 시간 선택을 안 했을 경우 처리
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('시간을 선택해주세요!')),
+                      SnackBar(content: Text('시간을 선택해주세요!',
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),)),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
+                  backgroundColor: Color(0xFF265A5A),
                   padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.2,
+                    horizontal: screenWidth * 0.35,
                     vertical: screenHeight * 0.02,
                   ),
                 ),
                 child: Text(
                   '다음',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.05,
+                    fontSize: screenWidth * 0.06,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -200,7 +210,7 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
         width: screenWidth * 0.39, // 버튼 폭 조정
         height: screenHeight * 0.07, // 버튼 높이 줄임
         decoration: BoxDecoration(
-          color: isSelected ? Colors.teal[800] : Colors.white,
+          color: isSelected ? Color(0xFF265A5A) : Colors.white,
           border: Border.all(color: Colors.teal[800]!, width: 2),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -209,7 +219,7 @@ class _TimeReservationPageState extends State<TimeReservationPage> {
             time,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: screenWidth * 0.045, // 버튼 텍스트 크기 조정
+              fontSize: screenWidth * 0.06, // 버튼 텍스트 크기 조정
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               color: isSelected ? Colors.white : Colors.teal[800],
             ),
