@@ -93,7 +93,7 @@ class ReservationConfirmationPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CheckPage(),
+                      builder: (context) => const CheckPage(date: '', time: '',),
                     ),
                   );
                 },
