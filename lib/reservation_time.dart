@@ -12,8 +12,8 @@ class TimeReservationPage extends StatefulWidget {
 }
 
 class _TimeReservationPageState extends State<TimeReservationPage> {
-  final List<String> morningTimes = ['8:00', '9:00', '10:00', '11:00', '12:00'];
-  final List<String> afternoonTimes = ['1:00', '2:00', '3:00', '4:00', '5:00'];
+  final List<String> morningTimes = ['8시', '9시', '10시', '11시', '12시'];
+  final List<String> afternoonTimes = ['1시', '2시', '3시', '4시', '5시'];
 
   String? selectedTime; // 선택된 시간
   String? selectedPeriod; // 선택된 오전/오후 구분

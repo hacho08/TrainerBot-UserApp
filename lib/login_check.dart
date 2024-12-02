@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'main_choice.dart';
+import 'models/user.dart';
 
 class LoginCheckPage extends StatefulWidget {
+  final User user;
+
+  LoginCheckPage({required this.user});
 
   @override
   _LoginCheckPageState createState() => _LoginCheckPageState();

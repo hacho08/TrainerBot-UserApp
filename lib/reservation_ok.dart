@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'models/reservation.dart';
+import 'services/reservation_api.dart';
+import 'global/global.dart';
 
 class ReservationConfirmationPage extends StatefulWidget {
   @override
@@ -8,20 +11,63 @@ class ReservationConfirmationPage extends StatefulWidget {
 
 class _ReservationConfirmationPageState
     extends State<ReservationConfirmationPage> {
-  // 예약 데이터 리스트
-  List<Map<String, String>> reservations = [
-    {'date': '12월 4일 수요일', 'time': '오전 7시 30분'},
-    {'date': '12월 5일 목요일', 'time': '오전 9시'},
-  ];
+  final ReservationApi reservationApi = ReservationApi();
+  List<Map<String, String>> reservations = [];
+  bool isLoading = true;
 
-  void _removeReservation(String date) {
-    setState(() {
-      // 리스트에서 해당 예약 데이터 제거
-      reservations.removeWhere((reservation) => reservation['date'] == date);
-    });
+  @override
+  void initState() {
+    super.initState();
+    _loadReservations();
   }
 
-  void _showCancelDialog(BuildContext context, String date) {
+  Future<void> _loadReservations() async {
+    try {
+      if (globalUserId != null) {
+        final fetchedReservations = await reservationApi.getUserReservations(globalUserId!);
+        setState(() {
+          reservations = fetchedReservations;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading reservations: $e');
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('예약 목록을 불러오는데 실패했습니다.')),
+      );
+    }
+  }
+
+  void _removeReservation(Map<String, String> reservation) async {
+    try {
+      String? bookingId = reservation['id'];  // reservation에서 id 가져오기
+      if (bookingId != null) {
+        bool success = await reservationApi.deleteReservation(bookingId);
+        if (success) {
+          setState(() {
+            reservations.removeWhere((item) => item['id'] == bookingId);
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('예약이 취소되었습니다.')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('예약 취소에 실패했습니다.')),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error removing reservation: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('예약 취소 중 오류가 발생했습니다.')),
+      );
+    }
+  }
+
+  void _showCancelDialog(BuildContext context, Map<String, String> reservation) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -48,7 +94,7 @@ class _ReservationConfirmationPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '$date 예약을 \n취소하시나요?',
+                  '${reservation['date']} 예약을 \n취소하시나요?',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: screenWidth * 0.06,
@@ -69,8 +115,8 @@ class _ReservationConfirmationPageState
                         ),
                       ),
                       onPressed: () {
-                        _removeReservation(date); // 예약 삭제
-                        Navigator.pop(context); // 팝업 닫기
+                        _removeReservation(reservation);
+                        Navigator.pop(context);
                       },
                       child: Text(
                         '예',
@@ -89,7 +135,7 @@ class _ReservationConfirmationPageState
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context); // 팝업 닫기
+                        Navigator.pop(context);
                       },
                       child: Text(
                         '아니오',
@@ -110,7 +156,7 @@ class _ReservationConfirmationPageState
   }
 
   Widget _buildReservationItem(BuildContext context,
-      {required int index, required String date, required String time}) {
+      {required int index, required Map<String, String> reservation}) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -141,7 +187,7 @@ class _ReservationConfirmationPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$date',
+                  reservation['date'] ?? '',
                   style: TextStyle(
                     fontSize: screenWidth * 0.06,
                     fontWeight: FontWeight.bold,
@@ -149,7 +195,7 @@ class _ReservationConfirmationPageState
                   ),
                 ),
                 Text(
-                  '$time',
+                  reservation['time'] ?? '',
                   style: TextStyle(
                     fontSize: screenWidth * 0.06,
                     color: Colors.black54,
@@ -160,7 +206,7 @@ class _ReservationConfirmationPageState
           ),
           IconButton(
             onPressed: () {
-              _showCancelDialog(context, date); // 팝업창 호출
+              _showCancelDialog(context, reservation);
             },
             icon: Icon(
               Icons.delete,
@@ -239,7 +285,9 @@ class _ReservationConfirmationPageState
             ),
             SizedBox(height: screenHeight * 0.04),
             Expanded(
-              child: reservations.isEmpty
+              child: isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : reservations.isEmpty
                   ? Center(
                 child: Text(
                   '예약 내역이 없습니다.',
@@ -258,8 +306,7 @@ class _ReservationConfirmationPageState
                       _buildReservationItem(
                         context,
                         index: index + 1,
-                        date: reservation['date']!,
-                        time: reservation['time']!,
+                        reservation: reservation,
                       ),
                       SizedBox(height: screenHeight * 0.05),
                     ],

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'global/global.dart';
 import 'login_check.dart';
+import 'services/user_api.dart';
+import 'models/user.dart';
+import 'main_choice.dart';
 
 class LoginPhoneNumberPage extends StatefulWidget {
   @override
@@ -8,8 +12,9 @@ class LoginPhoneNumberPage extends StatefulWidget {
 
 class _LoginPhoneNumberPageState extends State<LoginPhoneNumberPage> {
   String input = ''; // 입력된 값 저장
-  @override
+  final UserApi userApi = UserApi();  // UserApi 인스턴스 생성
 
+  @override
   void onKeyPress(String value) {
     setState(() {
       if (value == '지움') {
@@ -19,22 +24,17 @@ class _LoginPhoneNumberPageState extends State<LoginPhoneNumberPage> {
       } else if (value == '확인') {
         // 확인 버튼 눌렀을 때의 동작
         if (input.isNotEmpty && input.length == 11) {
-          // 전화번호가 11자리인 경우
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginCheckPage(),
-            ),
-          );
+          print('Input meets criteria, fetching user info...');
+          _fetchUserInfo(input); // 사용자 정보 조회
+          print('Input meets criteria, fetching user infddo...');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                '잘 입력되었는지 확인해주세요',
-                style: TextStyle(fontSize: 30, fontFamily: "PaperlogySemiBold"),
+              SnackBar(content: Text('잘 입력되었는지 확인해주세요',
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontFamily: "PaperlogySemiBold")
               ),
-            ),
-          );
+              ));
         }
       } else {
         if (input.length < 11) {
@@ -42,6 +42,34 @@ class _LoginPhoneNumberPageState extends State<LoginPhoneNumberPage> {
         }
       }
     });
+  }
+
+  Future<void> _fetchUserInfo(String phoneNumber) async {
+    try {
+      print('Fetching user info for phone number: $phoneNumber');
+      User user = await userApi.getUserById(phoneNumber); // 서버에서 사용자 정보 조회
+      print('User retrieved: ${user.toJson()}'); // user 객체 확인
+
+      // 글로벌 userId 저장
+      globalUserId = user.userId;  // 여기서 globalUserId 설정
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginCheckPage(user: user), // 조회된 사용자 정보를 전달
+        ),
+      );
+    }
+    catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '사용자를 찾을 수 없습니다.',
+            style: TextStyle(fontSize: 30),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -88,9 +116,12 @@ class _LoginPhoneNumberPageState extends State<LoginPhoneNumberPage> {
             ),
           ),
           Spacer(),
+          // Flexible(
+          //   child: Container(),  // 여유 공간을 자동으로 채움
+          // ),
           // 커스텀 키패드
           Container(
-            height: height * 0.5, // 키패드 영역 크기
+            height: height * 0.6, // 키패드 영역 크기
             color: Color(0xFF265A5A),
             padding: EdgeInsets.all(5),
             child: GridView.builder(
@@ -99,7 +130,7 @@ class _LoginPhoneNumberPageState extends State<LoginPhoneNumberPage> {
                 crossAxisCount: 3, // 3열
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
-                childAspectRatio: 1.5, // 정사각형 버튼
+                childAspectRatio: 1.6, // 정사각형 버튼
               ),
               itemCount: 12, // 0~9 + 지움 + 확인
               itemBuilder: (context, index) {
