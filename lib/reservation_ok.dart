@@ -1,3 +1,4 @@
+import 'package:dxpr/services/user_api.dart';
 import 'package:flutter/material.dart';
 import 'models/reservation.dart';
 import 'services/reservation_api.dart';
@@ -12,14 +13,44 @@ class ReservationConfirmationPage extends StatefulWidget {
 class _ReservationConfirmationPageState
     extends State<ReservationConfirmationPage> {
   final ReservationApi reservationApi = ReservationApi();
+  final UserApi userApi = UserApi();  // UserApi 추가
   List<Map<String, String>> reservations = [];
   bool isLoading = true;
+  String userName = '';
 
   @override
   void initState() {
     super.initState();
+    _loadUserNameAndReservations();  // 함께 로드
     _loadReservations();
   }
+
+  Future<void> _loadUserNameAndReservations() async {
+    try {
+      if (globalUserId != null) {
+        // 각각 따로 호출하여 타입 안전성 확보
+        final String name = await userApi.getUserName(globalUserId!);
+        final List<Map<String, String>> fetchedReservations =
+        await reservationApi.getUserReservations(globalUserId!);
+
+        setState(() {
+          userName = name;
+          reservations = fetchedReservations;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error loading data: $e');
+      setState(() {
+        userName = 'Unknown';
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('데이터를 불러오는데 실패했습니다.')),
+      );
+    }
+  }
+
 
   Future<void> _loadReservations() async {
     try {
@@ -255,7 +286,7 @@ class _ReservationConfirmationPageState
                       Text(
                         '뒤로 가기',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.05,
+                          fontSize: screenWidth * 0.03,
                           fontWeight: FontWeight.bold,
                           color: Colors.teal[800],
                         ),
@@ -276,7 +307,7 @@ class _ReservationConfirmationPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '옥수수님의 \n예약 내역입니다',
+              '${userName}님의 \n예약 내역입니다',
               style: TextStyle(
                 fontSize: screenWidth * 0.09,
                 fontWeight: FontWeight.bold,

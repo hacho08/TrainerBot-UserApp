@@ -87,7 +87,7 @@ class _ReservationPageState extends State<ReservationPage> {
                       Text(
                         '뒤로 가기',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.05, // 텍스트 크기 조정
+                          fontSize: screenWidth * 0.03, // 텍스트 크기 조정
                           fontWeight: FontWeight.bold,
                           color: Colors.teal[800],
                         ),
@@ -207,7 +207,7 @@ class _ReservationPageState extends State<ReservationPage> {
                 child: Text(
                   '다음',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.06,
+                    fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),

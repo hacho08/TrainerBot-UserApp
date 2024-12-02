@@ -1,4 +1,6 @@
+import 'package:dxpr/services/user_api.dart';
 import 'package:flutter/material.dart';
+import 'global/global.dart';
 import 'reservation_date.dart';
 import 'reservation_ok.dart';
 
@@ -17,7 +19,54 @@ class TrainerApp extends StatelessWidget {
   }
 }
 
-class TrainerHomePage extends StatelessWidget {
+class TrainerHomePage extends StatefulWidget  {
+  @override
+  _TrainerHomePageState createState() => _TrainerHomePageState();
+}
+
+class _TrainerHomePageState extends State<TrainerHomePage> {
+  final UserApi userApi = UserApi();
+  String userName = ''; // 사용자 이름을 저장할 변수
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    try {
+      if (globalUserId != null) {
+        print('Loading user name for ID: $globalUserId'); // 디버깅용 로그
+        final name = await userApi.getUserName(globalUserId!);
+        print('Loaded user name: $name'); // 디버깅용 로그
+
+        setState(() {
+          userName = name;
+          isLoading = false;
+        });
+      } else {
+        print('globalUserId is null'); // 디버깅용 로그
+        setState(() {
+          userName = 'Guest';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error in _loadUserName: $e');
+      setState(() {
+        userName = 'Guest';
+        isLoading = false;
+      });
+      // 에러 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('사용자 정보를 불러오는데 실패했습니다.')),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -52,11 +101,13 @@ class TrainerHomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: screenWidth * 0.03), // 왼쪽에 공백 추가
-                  child: Text(
-                    '환영합니다\n옥수수님',
+                  padding: EdgeInsets.only(left: screenWidth * 0.02), // 왼쪽에 공백 추가
+                  child: isLoading
+                      ? CircularProgressIndicator() // 로딩 중일 때 표시
+                      : Text(
+                    '환영합니다\n${userName}님',
                     style: TextStyle(
-                      fontSize: screenWidth * 0.1, // 비율에 맞춘 텍스트 크기
+                      fontSize: screenWidth * 0.1,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF265A5A),
                     ),

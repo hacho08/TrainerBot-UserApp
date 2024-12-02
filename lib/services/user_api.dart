@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class UserApi {
-  static const String baseUrl = "http://192.168.219.109:8090/api"; // 서버 주소
+  static const String baseUrl = "http://192.168.0.14:8090/api"; // 서버 주소
 
 
   // 특정 사용자 조회
@@ -20,7 +20,8 @@ class UserApi {
     print('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+      final Map<String, dynamic> data = json.decode(
+          utf8.decode(response.bodyBytes));
 
       // User 객체로 변환
       return User.fromJson(data);
@@ -28,5 +29,30 @@ class UserApi {
       throw Exception('Failed to load user with ID $userId');
     }
   }
-}
 
+  Future<String> getUserName(String userId) async {
+    final url = Uri.parse('$baseUrl/users/getUserInfo');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8', // UTF-8 명시
+        },
+        body: json.encode({'userId': userId}),
+      );
+
+      if (response.statusCode == 200) {
+        final userData = json.decode(
+            utf8.decode(response.bodyBytes)); // utf8.decode 사용
+        String userName = userData['userName'] ?? 'Unknown';
+        print('Received userName: $userName');
+        return userName;
+      } else {
+        throw Exception('Failed to load user name');
+      }
+    } catch (e) {
+      print('Error in getUserName: $e');
+      rethrow;
+    }
+  }
+}

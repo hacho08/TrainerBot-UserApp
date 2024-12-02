@@ -121,7 +121,7 @@ class _LoginPhoneNumberPageState extends State<LoginPhoneNumberPage> {
           // ),
           // 커스텀 키패드
           Container(
-            height: height * 0.6, // 키패드 영역 크기
+            height: height * 0.5, // 키패드 영역 크기
             color: Color(0xFF265A5A),
             padding: EdgeInsets.all(5),
             child: GridView.builder(

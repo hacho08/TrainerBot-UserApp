@@ -102,7 +102,7 @@ class _ReservationConfirmationPageState extends State<ReservationConfirmationPag
                       Text(
                         '뒤로 가기',
                         style: TextStyle(
-                          fontSize: screenWidth * 0.05, // 텍스트 크기 조정
+                          fontSize: screenWidth * 0.03, // 텍스트 크기 조정
                           fontWeight: FontWeight.bold,
                           color: Colors.teal[800],
                         ),
@@ -201,7 +201,7 @@ class _ReservationConfirmationPageState extends State<ReservationConfirmationPag
                 child: Text(
                   '예약하기',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.05,
+                    fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),

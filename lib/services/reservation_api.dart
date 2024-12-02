@@ -4,7 +4,7 @@ import '../global/global.dart';
 import '../models/reservation.dart';
 
 class ReservationApi{
-  static const String baseUrl = "http://192.168.219.109:8090/api";
+  static const String baseUrl = "http://192.168.0.14:8090/api";
 
   // 예약 추가
   Future<int> addReservation(Reservation reservation) async {
@@ -96,27 +96,26 @@ class ReservationApi{
   Future<bool> deleteReservation(String bookingId) async {
     final url = Uri.parse('$baseUrl/deleteReservations');
     try {
+      print('Deleting booking with ID: $bookingId'); // 디버깅용
+
       final response = await http.delete(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'id': bookingId,           // bookingId 전달
-          'userId': globalUserId,    // userId 전달
-        }),
+        body: json.encode({'id': bookingId}),
       );
 
       if (response.statusCode == 200) {
-        print('Reservation deleted successfully');
         return true;
       } else {
-        print('Failed to delete reservation: ${response.body}');
+        print('Delete failed: ${response.body}'); // 디버깅용
         return false;
       }
     } catch (e) {
-      print('Error deleting reservation: $e');
+      print('Delete error: $e'); // 디버깅용
       return false;
     }
   }
+
 
   // 날짜 포맷팅 헬퍼 메서드
   String _formatDate(DateTime date) {
