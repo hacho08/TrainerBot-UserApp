@@ -47,7 +47,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: false
-  image_path: "images/mask_icon.jpg"
+  image_path: "images/main_green.png"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
