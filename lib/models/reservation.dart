@@ -1,17 +1,21 @@
 class Reservation{
   String _userId;
+  String? _bookingId;
   DateTime _bookingDate;
 
   Reservation({
     required String userId,
+    String? bookingId,
     required DateTime bookingDate,
   })  : _userId = userId,
+        _bookingId = bookingId,
         _bookingDate = bookingDate;
 
   // JSON을 Dart 객체로 변환하는 팩토리 메서드
   factory Reservation.fromJson(Map<String, dynamic> json) {
     return Reservation(
       userId: json['userId'],
+      bookingId: json['bookingId'],
       bookingDate: DateTime.parse(json['bookingDate']),
     );
   }
@@ -20,6 +24,7 @@ class Reservation{
   Map<String, dynamic> toJson() {
     return {
       'userId': _userId,
+      'bookingId': _bookingId,
       'bookingDate': _bookingDate.toIso8601String(),
     };
   }
@@ -35,4 +40,6 @@ class Reservation{
   set userId(String value) {
     _userId = value;
   }
+
+
 }

@@ -174,7 +174,7 @@ class _ReservationPageState extends State<ReservationPage> {
                 ),
               ],
             ),
-            SizedBox(height: screenHeight * 0.06),
+            SizedBox(height: screenHeight * 0.04),
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -207,7 +207,7 @@ class _ReservationPageState extends State<ReservationPage> {
                 child: Text(
                   '다음',
                   style: TextStyle(
-                    fontSize: screenWidth * 0.04,
+                    fontSize: screenWidth * 0.06,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),

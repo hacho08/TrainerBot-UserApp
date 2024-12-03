@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'global/global.dart';
 import 'reservation_date.dart';
 import 'reservation_ok.dart';
-
+import 'main.dart';  // MainApp import 추가
 
 class TrainerApp extends StatelessWidget {
   @override
@@ -12,21 +12,21 @@ class TrainerApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'LG 트레이너 봇',
       theme: ThemeData(
-        fontFamily: "PaperlogySemiBold", // 전체 앱에서 적용할 폰트 설정
+        fontFamily: "PaperlogySemiBold",
       ),
       home: TrainerHomePage(),
     );
   }
 }
 
-class TrainerHomePage extends StatefulWidget  {
+class TrainerHomePage extends StatefulWidget {
   @override
   _TrainerHomePageState createState() => _TrainerHomePageState();
 }
 
 class _TrainerHomePageState extends State<TrainerHomePage> {
   final UserApi userApi = UserApi();
-  String userName = ''; // 사용자 이름을 저장할 변수
+  String userName = '';
   bool isLoading = true;
 
   @override
@@ -38,16 +38,16 @@ class _TrainerHomePageState extends State<TrainerHomePage> {
   Future<void> _loadUserName() async {
     try {
       if (globalUserId != null) {
-        print('Loading user name for ID: $globalUserId'); // 디버깅용 로그
+        print('Loading user name for ID: $globalUserId');
         final name = await userApi.getUserName(globalUserId!);
-        print('Loaded user name: $name'); // 디버깅용 로그
+        print('Loaded user name: $name');
 
         setState(() {
           userName = name;
           isLoading = false;
         });
       } else {
-        print('globalUserId is null'); // 디버깅용 로그
+        print('globalUserId is null');
         setState(() {
           userName = 'Guest';
           isLoading = false;
@@ -59,13 +59,11 @@ class _TrainerHomePageState extends State<TrainerHomePage> {
         userName = 'Guest';
         isLoading = false;
       });
-      // 에러 메시지 표시
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('사용자 정보를 불러오는데 실패했습니다.')),
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,19 +73,43 @@ class _TrainerHomePageState extends State<TrainerHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.1), // AppBar 높이 살짝 증가
+        preferredSize: Size.fromHeight(screenHeight * 0.1),
         child: Container(
-          color: Color(0xFFDCE4E4), // AppBar 배경 색상
-          padding: EdgeInsets.only(top: screenHeight * 0.02, left: screenWidth * 0.05), // 위와 왼쪽에 여백 추가
-          alignment: Alignment.centerLeft, // 왼쪽 정렬
+          color: Color(0xFFDCE4E4),
+          padding: EdgeInsets.only(top: screenHeight * 0.02),
           child: SafeArea(
-            child: Text(
-              'LG 트레이너 봇',
-              style: TextStyle(
-                color: Colors.teal[800],
-                fontSize: screenWidth * 0.08, // 비율에 맞춘 텍스트 크기
-                fontWeight: FontWeight.bold, // 글자 더 진하게 설정
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: screenWidth * 0.05),
+                  child: Text(
+                    'LG 트레이너 봇',
+                    style: TextStyle(
+                      color: Colors.teal[800],
+                      fontSize: screenWidth * 0.08,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: screenWidth * 0.05),
+                  child: IconButton(
+                    iconSize: screenWidth * 0.1,
+                    icon: Icon(
+                        Icons.logout,
+                        color: Colors.teal[800],
+                        size: screenWidth * 0.1,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                            (route) => false,
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -101,9 +123,9 @@ class _TrainerHomePageState extends State<TrainerHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: screenWidth * 0.02), // 왼쪽에 공백 추가
+                  padding: EdgeInsets.only(left: screenWidth * 0.02),
                   child: isLoading
-                      ? CircularProgressIndicator() // 로딩 중일 때 표시
+                      ? CircularProgressIndicator()
                       : Text(
                     '환영합니다\n${userName}님',
                     style: TextStyle(
@@ -117,9 +139,9 @@ class _TrainerHomePageState extends State<TrainerHomePage> {
                   padding: EdgeInsets.only(right: screenWidth * 0.05),
                   child: Image.asset(
                     "images/main_green.png",
-                    width: screenWidth * 0.4, // 이미지의 너비를 설정
-                    height: screenWidth * 0.4, // 이미지의 높이를 설정
-                    fit: BoxFit.contain, // 이미지 비율 유지
+                    width: screenWidth * 0.4,
+                    height: screenWidth * 0.4,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ],
@@ -189,7 +211,7 @@ class _TrainerHomePageState extends State<TrainerHomePage> {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: fontSize, // 비율에 맞춘 텍스트 크기
+            fontSize: fontSize,
             color: Colors.black87,
           ),
         ),

@@ -73,7 +73,7 @@ class ReservationApi{
 
         List<Map<String, String>> reservations = responseData.map<Map<String, String>>((reservation) {
           DateTime bookingDate = DateTime.parse(reservation['bookingDate']);
-          String bookingId = reservation['id'].toString(); // 예약 ID 저장
+          String bookingId = reservation['bookingId'].toString(); // 예약 ID 저장
 
           return {
             'id': bookingId,

@@ -79,7 +79,7 @@ class _ReservationConfirmationPageState
         bool success = await reservationApi.deleteReservation(bookingId);
         if (success) {
           setState(() {
-            reservations.removeWhere((item) => item['id'] == bookingId);
+            reservations.remove(reservation);  // 선택된 예약만 제거
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('예약이 취소되었습니다.')),
