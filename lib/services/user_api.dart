@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class UserApi {
-  static const String baseUrl = "http://192.168.0.14:8090/api"; // 서버 주소
+  static const String baseUrl = "http://192.168.0.32:8090/api"; // 서버 주소
 
 
   // 특정 사용자 조회

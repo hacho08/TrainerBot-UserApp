@@ -4,7 +4,7 @@ import '../global/global.dart';
 import '../models/reservation.dart';
 
 class ReservationApi{
-  static const String baseUrl = "http://192.168.0.14:8090/api";
+  static const String baseUrl = "http://192.168.0.32:8090/api";
 
   // 예약 추가
   Future<int> addReservation(Reservation reservation) async {
@@ -20,7 +20,7 @@ class ReservationApi{
     } else {
       throw Exception('Failed to add reservation: ${response.body}');
     }
-
+    print(response.statusCode);
     return response.statusCode;
   }
 
